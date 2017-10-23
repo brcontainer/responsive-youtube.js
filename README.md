@@ -50,13 +50,6 @@ ResponsiveYoutube.on("state", function (event, player) {
 });
 ```
 
-Example in HTML:
-
-```html
-<div data-ry-video="TALH8SsQJp4" data-ry-></div>
-<div data-ry-video="5ABos9UTfJU"></div>
-```
-
 ## Properties
 
 Property | description

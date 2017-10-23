@@ -19,7 +19,7 @@ ResponsiveYoutube.start();
 
 ## Events
 
-Name | equivalent | description
+Name | equivalent
 --- | ---
 `done` | -
 `create` | -

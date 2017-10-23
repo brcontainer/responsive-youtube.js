@@ -1,4 +1,4 @@
-# Responsive-Youtube.js
+# Responsive-youtube.js
 
 Simple script for use Youtube Iframe API in responsive web sites
 
@@ -11,24 +11,24 @@ Simple script for use Youtube Iframe API in responsive web sites
 <!-- embed video in page without "responsive" -->
 <div data-ry-video="5ABos9UTfJU" data-ry-ignore="true"></div>
 
-<script type="text/javascript" src="responsive-youtube.js"></script>
-<script type="text/javascript">
+<script src="responsive-youtube.js"></script>
+<script>
 ResponsiveYoutube.start();
 </script>
 ```
 
 ## Events
 
-Name | equivalent
+Name | equivalent to
 --- | ---
-`done` | -
+`done` | `onYouTubeIframeAPIReady`
 `create` | -
-`read` | `YT.player.events.onReady`
-`state` | `YT.player.events.onStateChange`
-`quality` | `YT.player.events.onPlaybackQualityChange`
-`rate` | `YT.player.events.onPlaybackRateChange`
-`error` | `YT.player.events.onError`
-`api` | `YT.player.events.onApiChange`
+`read` | `onReady`
+`state` | `onStateChange`
+`quality` | `onPlaybackQualityChange`
+`rate` | `onPlaybackRateChange`
+`error` | `onError`
+`api` | `onApiChange`
 
 More details in: https://developers.google.com/youtube/iframe_api_reference#Events
 

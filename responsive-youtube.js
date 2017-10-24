@@ -1,5 +1,5 @@
 /*
- * Responsive-Youtube.js 0.0.1
+ * Responsive-Youtube.js 0.1.0
  *
  * Copyright (c) 2017 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
@@ -9,14 +9,16 @@
 (function (w, d, u) {
     "use strict";
 
-    var iframes = [],
+    var players = [],
         genericIds = 0,
         started = false,
         setuped = false,
+        paused = true,
         evts = {},
         dOpts = {},
         m = w.Element && w.Element.prototype,
-        query = "[data-ry-video]:not(iframe)";
+        query = "[data-ry-video]:not(iframe)",
+        ignoreData = ",with,height,ignore,video,cover,";
 
     function responsiveIframe(el) {
         //Check if element is detached
@@ -54,8 +56,6 @@
                 onReady: function(e) {
                     var el = d.getElementById(elID);
                     responsiveIframe(el);
-                    iframes.push(el);
-
                     ryTrigger("ready", e, player);
                 },
                 onStateChange: function (e) {
@@ -76,7 +76,27 @@
             }
         });
 
+        players.push(player);
+
         ryTrigger("create", player);
+    }
+
+    function dataVars(el) {
+        var attrs = el.attributes, obj = {}, v;
+
+        for (var i = attrs.length - 1; i >= 0; i--) {
+            var k = attrs[i].nodeName;
+
+            if (k.indexOf("data-ry-") === 0) {
+                v = k.replace(/^data-ry-/, "");
+
+                if (ignoreData.indexOf("," + v + ",") === -1) {
+                    obj[v] = data(el, k.substr(5));
+                }
+            }
+        }
+
+        return obj;
     }
 
     function data(el, name) {
@@ -84,7 +104,9 @@
 
         if (d === "true" || d === "false") {
             return d === "true";
-        } else if (/^\[[\s\S]+\]$|^\{[\s\S]+\}$/.test(d)) {
+        } else if (!isNaN(d)) {
+            return parseFloat(d);
+        } else if (/^\[[\s\S]+\]$|^\{[^:]+[:][\s\S]+\}$/.test(d)) {
             try { resp = JSON.parse(d); } catch (e) {}
         }
 
@@ -92,6 +114,8 @@
     }
 
     function observer(m) {
+        if (paused) return;
+
         var added = m.addedNodes, p = [], n = [];
 
         for (var i = added.length - 1; i >= 0; i--) {
@@ -112,9 +136,9 @@
         setuped = true;
 
         w.addEventListener("resize", function() {
-            if (iframes.length) {
-                for (var i = 0, j = iframes.length; i < j; i++) {
-                    responsiveIframe(iframes[i]);
+            if (players.length) {
+                for (var i = 0, j = players.length; i < j; i++) {
+                    responsiveIframe(players[i].getIframe());
                 }
             }
         });
@@ -141,7 +165,7 @@
                 el.id = "responsive-youtube-" + genericIds;
             }
 
-            putPlayer(el.id, data(el, "ry-video"), data(el, "ry-config"));
+            putPlayer(el.id, data(el, "ry-video"), dataVars(el));
         }
     }
 
@@ -159,14 +183,14 @@
             dOpts = {};
         }
 
+        paused = false;
+
         w.onYouTubeIframeAPIReady = function () {
             createPlayers(d.querySelectorAll(query));
             setup();
         };
 
-        if (started) {
-            return;
-        }
+        if (started) return;
 
         started = true;
 
@@ -176,6 +200,19 @@
         tag.src = "https://www.youtube.com/iframe_api";
         var fs = d.getElementsByTagName("script")[0];
         fs.parentNode.insertBefore(tag, fs);
+    }
+
+    function destroy()
+    {
+        paused = true;
+
+        dOpts = {};
+
+        for (var i = players.length - 1; i >= 0; i--) {
+            players[i].destroy();
+        }
+
+        players = [];
     }
 
     function ryTrigger(name, arg1, arg2) {
@@ -207,6 +244,7 @@
 
     w.ResponsiveYoutube = {
         "start": start,
+        "destroy": destroy,
         "on": function (name, callback) {
             ryEvent(name, callback);
         },

@@ -141,7 +141,8 @@
         }
     }
 
-    function createPlayers(els) {
+    function createPlayers(els)
+    {
         for (var i = 0, j = els.length; i < j; i++) {
             var el = els[i];
 

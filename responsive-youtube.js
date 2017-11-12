@@ -1,5 +1,5 @@
 /*
- * Responsive-Youtube.js 0.1.0
+ * Responsive-youtube.js 0.1.2
  *
  * Copyright (c) 2017 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
@@ -11,24 +11,25 @@
 
     var players = [],
         genericIds = 0,
-        started = false,
         setuped = false,
         paused = true,
         evts = {},
         dOpts = {},
-        m = w.Element && w.Element.prototype,
+        element = w.Element && w.Element.prototype,
         query = "[data-ry-video]:not(iframe)",
-        ignoreData = ",with,height,ignore,video,cover,";
+        ignoreData = ",with,height,ignore,video,cover,",
+        MO = w.MutationObserver || w.WebKitMutationObserver;
 
-    function responsiveIframe(el) {
+    function responsiveIframe(el)
+    {
         //Check if element is detached
-        if (!el || !d.contains(el)) return;
+        if (!el || !d.body.contains(el)) return;
 
         //Check if responsive is ignored in specific element
-        if (data(el, "ry-ignore") === true) return;
+        if (data(el, "ignore") === true) return;
 
-        var originalWidth = data(el, "ry-width") || el.clientWidth;
-        var originalHeight = data(el, "ry-height") || el.clientHeight;
+        var originalWidth = data(el, "width") || el.clientWidth;
+        var originalHeight = data(el, "height") || el.clientHeight;
 
         el.setAttribute("data-ry-width", originalWidth);
         el.setAttribute("data-ry-height", originalHeight);
@@ -42,7 +43,8 @@
         }
     }
 
-    function putPlayer(elID, vID, cfg) {
+    function putPlayer(elID, vID, cfg)
+    {
         if (!cfg || typeof cfg !== "object") {
             cfg = {};
         }
@@ -53,45 +55,45 @@
             videoId: vID,
             playerVars: cfg,
             events: {
-                onReady: function(e) {
-                    var el = d.getElementById(elID);
-                    responsiveIframe(el);
-                    ryTrigger("ready", e, player);
+                onReady: function (e) {
+                    responsiveIframe(d.getElementById(elID));
+                    trigger("ready", e, player);
                 },
                 onStateChange: function (e) {
-                    ryTrigger("state", e, player);
+                    trigger("state", e, player);
                 },
                 onPlaybackQualityChange: function (e) {
-                    ryTrigger("quality", e, player);
+                    trigger("quality", e, player);
                 },
                 onPlaybackRateChange: function (e) {
-                    ryTrigger("rate", e, player);
+                    trigger("rate", e, player);
                 },
                 onError: function (e) {
-                    ryTrigger("error", e, player);
+                    trigger("error", e, player);
                 },
                 onApiChange: function (e) {
-                    ryTrigger("api", e, player);
+                    trigger("api", e, player);
                 }
             }
         });
 
         players.push(player);
 
-        ryTrigger("create", player);
+        trigger("create", player);
     }
 
-    function dataVars(el) {
-        var attrs = el.attributes, obj = {}, v;
+    function dataVars(el)
+    {
+        var attrs = el.attributes, obj = {};
 
         for (var i = attrs.length - 1; i >= 0; i--) {
             var k = attrs[i].nodeName;
 
             if (k.indexOf("data-ry-") === 0) {
-                v = k.replace(/^data-ry-/, "");
+                k = k.substr(8);
 
-                if (ignoreData.indexOf("," + v + ",") === -1) {
-                    obj[v] = data(el, k.substr(5));
+                if (ignoreData.indexOf("," + k + ",") === -1) {
+                    obj[k] = data(el, k);
                 }
             }
         }
@@ -99,21 +101,23 @@
         return obj;
     }
 
-    function data(el, name) {
-        var d = el.getAttribute("data-" + name), resp;
+    function data(el, name)
+    {
+        var v = el.getAttribute("data-ry-" + name), resp;
 
-        if (d === "true" || d === "false") {
-            return d === "true";
-        } else if (!isNaN(d)) {
-            return parseFloat(d);
-        } else if (/^\[[\s\S]+\]$|^\{[^:]+[:][\s\S]+\}$/.test(d)) {
-            try { resp = JSON.parse(d); } catch (e) {}
+        if (v === "true" || v === "false") {
+            return v === "true";
+        } else if (!isNaN(v)) {
+            return parseFloat(v);
+        } else if (/^\[[\s\S]+\]$|^\{[^:]+[:][\s\S]+\}$/.test(v)) {
+            try { resp = JSON.parse(v); } catch (e) {}
         }
 
-        return resp || d;
+        return resp || v;
     }
 
-    function observer(m) {
+    function observer(m)
+    {
         if (paused) return;
 
         var added = m.addedNodes, p = [], n = [];
@@ -130,27 +134,8 @@
         findPlayers(p);
     }
 
-    function setup() {
-        if (setuped) return;
-
-        setuped = true;
-
-        w.addEventListener("resize", function() {
-            if (players.length) {
-                for (var i = 0, j = players.length; i < j; i++) {
-                    responsiveIframe(players[i].getIframe());
-                }
-            }
-        });
-
-        (new MutationObserver(function (m) {
-            m.forEach(observer);
-        })).observe(d.body, { childList: true });
-
-        ryTrigger("done");
-    }
-
-    function findPlayers(els) {
+    function findPlayers(els)
+    {
         for (var i = 0, j = els.length; i < j; i++) {
             createPlayers(els[i].querySelectorAll(query));
         }
@@ -161,11 +146,10 @@
             var el = els[i];
 
             if (!el.id) {
-                genericIds++;
-                el.id = "responsive-youtube-" + genericIds;
+                el.id = "responsive-youtube-" + (++genericIds);
             }
 
-            putPlayer(el.id, data(el, "ry-video"), dataVars(el));
+            putPlayer(el.id, data(el, "video"), dataVars(el));
         }
     }
 
@@ -176,7 +160,31 @@
         }
     }
 
-    function start(opts) {
+    function setup()
+    {
+        createPlayers(d.querySelectorAll(query));
+
+        if (setuped) return;
+
+        setuped = true;
+
+        w.addEventListener("resize", function () {
+            if (players.length) {
+                for (var i = 0, j = players.length; i < j; i++) {
+                    responsiveIframe(players[i].getIframe());
+                }
+            }
+        });
+
+        (new MO(function (m) {
+            m.forEach(observer);
+        })).observe(d.body, { childList: true });
+
+        trigger("done");
+    }
+
+    function start(opts)
+    {
         if (typeof opts === "object") {
             config(opts, dOpts);
         } else {
@@ -185,14 +193,9 @@
 
         paused = false;
 
-        w.onYouTubeIframeAPIReady = function () {
-            createPlayers(d.querySelectorAll(query));
-            setup();
-        };
+        if (w.YT && w.YT.Player) return setup();
 
-        if (started) return;
-
-        started = true;
+        w.onYouTubeIframeAPIReady = setup;
 
         //Inject Youtube Iframe API
         var tag = d.createElement("script");
@@ -208,20 +211,20 @@
 
         dOpts = {};
 
-        for (var i = players.length - 1; i >= 0; i--) {
-            players[i].destroy();
-        }
+        for (var i = players.length - 1; i >= 0; i--) players[i].destroy();
 
         players = [];
     }
 
-    function ryTrigger(name, arg1, arg2) {
+    function trigger(name, arg1, arg2)
+    {
         if (!evts[name]) return;
 
         for (var ce = evts[name], i = 0; i < ce.length; i++) ce[i](arg1, arg2);
     }
 
-    function ryEvent(name, callback, remove) {
+    function evt(name, callback, remove)
+    {
         if (typeof callback !== "function") return;
 
         if (!evts[name]) evts[name] = [];
@@ -229,22 +232,21 @@
         var ce = evts[name];
 
         if (!remove) {
-            ce.push(callback);
+            ce[type].push(callback);
             return;
         }
 
-        var fr = [], i;
+        ce[type] = ce[type].filter(function (item) {
+            return item !== callback;
+        });
 
-        for (i = ce.length - 1; i >= 0; i--) {
-            if (ce[i] === callback) fr.push(i);
-        }
-
-        for (i = fr.length - 1; i >= 0; i--) ce.splice(fr[i], 1);
+        ce = null;
     }
 
     w.ResponsiveYoutube = {
         "start": start,
         "destroy": destroy,
+        "supported": !!MO,
         "on": function (name, callback) {
             ryEvent(name, callback);
         },
@@ -253,10 +255,10 @@
         }
     };
 
-    if (!m || m.matches) return;
+    if (!element || element.matches) return;
 
-    m.matches = m.matchesSelector || m.mozMatchesSelector || m.msMatchesSelector ||
-    m.oMatchesSelector || m.webkitMatchesSelector || function(s) {
+    element.matches = element.matchesSelector || element.mozMatchesSelector || element.msMatchesSelector ||
+    element.oMatchesSelector || element.webkitMatchesSelector || function (s) {
         var m = (this.document || this.ownerDocument).querySelectorAll(s), i = m.length;
 
         while (--i >= 0 && m[i] !== this);

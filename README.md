@@ -2,6 +2,17 @@
 
 Simple script for use Youtube Iframe API in responsive web sites
 
+## Requirements
+
+- IE9+
+- Safari6+
+- Google Chrome
+- Firefox
+- MutationObserver
+
+> Note¹: Use `if (ResponsiveYoutube.supported)`
+> Note²: Youtube API requires `Object.create` function (IE9+ and Safari5+)
+
 ## HTML usage
 
 ```html
@@ -17,27 +28,28 @@ ResponsiveYoutube.start();
 </script>
 ```
 
-## Functions
+## Properties and functions
 
 Name | description
 --- | ---
-`start` | Create players
-`on` | Add global event
-`off` | Remove global event
-`destroy` | Destroy all players (use with Angular pagination, Ajax pagination, and Pjax)
+`ResponsiveYoutube.supported` | Create players
+`ResponsiveYoutube.start([setup])` | Create players
+`ResponsiveYoutube.on(type, function)` | Add global event
+`ResponsiveYoutube.off(type, function)` | Remove global event
+`ResponsiveYoutube.destroy()` | Destroy all players (use with Angular pagination, Ajax pagination, and Pjax)
 
 ## Events
 
-Name | equivalent to
---- | ---
-`done` | `onYouTubeIframeAPIReady`
-`create` | -
-`read` | `onReady`
-`state` | `onStateChange`
-`quality` | `onPlaybackQualityChange`
-`rate` | `onPlaybackRateChange`
-`error` | `onError`
-`api` | `onApiChange`
+Name | equivalent to | callback format
+--- | --- | ---
+`done` | `onYouTubeIframeAPIReady` | `function () {...}`
+`create` | - | `function (player) {...}`
+`read` | `onReady` | `function (event, player) {...}`
+`state` | `onStateChange` | `function (event, player) {...}`
+`quality` | `onPlaybackQualityChange` | `function (event, player) {...}`
+`rate` | `onPlaybackRateChange` | `function (event, player) {...}`
+`error` | `onError` | `function (event, player) {...}`
+`api` | `onApiChange` | `function (event, player) {...}`
 
 More details in: https://developers.google.com/youtube/iframe_api_reference#Events
 

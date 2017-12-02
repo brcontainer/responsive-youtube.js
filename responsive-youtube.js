@@ -1,5 +1,5 @@
 /*
- * Responsive-youtube.js 0.1.2
+ * Responsive-youtube.js 0.1.3
  *
  * Copyright (c) 2017 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
@@ -230,18 +230,14 @@
 
         if (!evts[name]) evts[name] = [];
 
-        var ce = evts[name];
-
         if (!remove) {
-            ce[type].push(callback);
+            evts[name].push(callback);
             return;
         }
 
-        ce[type] = ce[type].filter(function (item) {
+        evts[name] = evts[name].filter(function (item) {
             return item !== callback;
         });
-
-        ce = null;
     }
 
     w.ResponsiveYoutube = {
@@ -249,10 +245,10 @@
         "destroy": destroy,
         "supported": !!MO,
         "on": function (name, callback) {
-            ryEvent(name, callback);
+            evt(name, callback);
         },
         "off": function (name, callback) {
-            ryEvent(name, callback, true);
+            evt(name, callback, true);
         }
     };
 

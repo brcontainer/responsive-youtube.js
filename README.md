@@ -45,7 +45,7 @@ Name | equivalent to | callback format
 --- | --- | ---
 `done` | `onYouTubeIframeAPIReady` | `function () {...}`
 `create` | - | `function (player) {...}`
-`read` | `onReady` | `function (event, player) {...}`
+`ready` | `onReady` | `function (event, player) {...}`
 `state` | `onStateChange` | `function (event, player) {...}`
 `quality` | `onPlaybackQualityChange` | `function (event, player) {...}`
 `rate` | `onPlaybackRateChange` | `function (event, player) {...}`

@@ -11,7 +11,7 @@
 
 <hr>
 
-<script type="text/javascript" src="../responsive-youtube.js"></script>
+<script type="text/javascript" src="../responsive-youtube.min.js"></script>
 <script type="text/javascript">
 ResponsiveYoutube.start({
     "rel": 0 //Remove related videos
@@ -22,19 +22,19 @@ ResponsiveYoutube.start({
 
     function addVideo(id)
     {
-        var el = document.createElement("div");
+        var el = d.createElement("div");
         el.setAttribute("data-ry-video", id);
-        document.body.appendChild(el);
+        d.body.appendChild(el);
     }
 
-    document.getElementById("video1").onclick = function () {
+    d.getElementById("video1").onclick = function () {
         if (v1) return;
 
         v1 = true;
 
         addVideo("TALH8SsQJp4");
     };
-    document.getElementById("video2").onclick = function () {
+    d.getElementById("video2").onclick = function () {
         if (v2) return;
 
         v2 = true;

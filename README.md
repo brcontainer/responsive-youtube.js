@@ -4,7 +4,7 @@ Simple script for use Youtube Iframe API in responsive web sites
 
 ## Requirements
 
-- IE9+
+- IE10+
 - Safari6+
 - Google Chrome
 - Firefox
@@ -12,7 +12,7 @@ Simple script for use Youtube Iframe API in responsive web sites
 
 > Note¹: Use `if (ResponsiveYoutube.supported)`
 >
-> Note²: Youtube API requires `Object.create` function (IE9+ and Safari5+)
+> Note²: Youtube API requires IE10+
 
 ## HTML usage
 

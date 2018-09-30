@@ -1,7 +1,7 @@
 /*
- * Responsive-youtube.js 0.1.3
+ * Responsive-youtube.js 0.1.5
  *
- * Copyright (c) 2017 Guilherme Nascimento (brcontainer@yahoo.com.br)
+ * Copyright (c) 2018 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
  * Released under the MIT license
  */
@@ -15,10 +15,25 @@
         paused = true,
         evts = {},
         dOpts = {},
+        timeout,
+        readytimeout,
         element = w.Element && w.Element.prototype,
         query = "[data-ry-video]:not(iframe)",
         ignoreData = ",with,height,ignore,video,cover,",
         MO = w.MutationObserver || w.WebKitMutationObserver;
+
+    function updateSize(done)
+    {
+        if (done !== true) {
+            if (timeout) clearTimeout(timeout);
+
+            timeout = setTimeout(updateSize, 300, true);
+        } else if (players.length) {
+            for (var i = 0, j = players.length; i < j; i++) {
+                responsiveIframe(players[i].getIframe());
+            }
+        }
+    }
 
     function responsiveIframe(el)
     {
@@ -41,6 +56,15 @@
         } else {
             el.height = el.clientWidth;
         }
+    }
+
+    function forceResponsive(done)
+    {
+        if (done) return updateSize();
+
+        clearTimeout(readytimeout);
+
+        readytimeout = setTimeout(forceResponsive, 5000, true);
     }
 
     function putPlayer(elID, vID, cfg)
@@ -80,6 +104,8 @@
         players.push(player);
 
         trigger("create", player);
+
+        forceResponsive();
     }
 
     function dataVars(el)
@@ -120,18 +146,24 @@
     {
         if (paused) return;
 
-        var added = m.addedNodes, p = [], n = [];
+        var added = m.addedNodes, p = [], n = [], el;
 
         for (var i = added.length - 1; i >= 0; i--) {
-            if (added[i].matches(query)) {
-                p.push(added[i]);
+            el = added[i];
+
+            if (el.nodeType !== 1) continue;
+
+            if (el.matches(query) && el.matches) {
+                p.push(el);
             } else {
-                n.push(added[i]);
+                n.push(el);
             }
         }
 
+        el = u;
+
         createPlayers(p);
-        findPlayers(p);
+        findPlayers(n);
     }
 
     function findPlayers(els)
@@ -169,13 +201,9 @@
 
         setuped = true;
 
-        w.addEventListener("resize", function () {
-            if (players.length) {
-                for (var i = 0, j = players.length; i < j; i++) {
-                    responsiveIframe(players[i].getIframe());
-                }
-            }
-        });
+        w.addEventListener("resize", updateSize);
+
+        if (!MO) return trigger("error");
 
         (new MO(function (m) {
             m.forEach(observer);

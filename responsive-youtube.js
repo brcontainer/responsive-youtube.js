@@ -1,7 +1,7 @@
 /*
- * Responsive-youtube.js 0.1.5
+ * Responsive-youtube.js 0.1.6
  *
- * Copyright (c) 2018 Guilherme Nascimento (brcontainer@yahoo.com.br)
+ * Copyright (c) 2019 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
  * Released under the MIT license
  */
@@ -69,9 +69,7 @@
 
     function putPlayer(elID, vID, cfg)
     {
-        if (!cfg || typeof cfg !== "object") {
-            cfg = {};
-        }
+        if (!cfg || typeof cfg !== "object") cfg = {};
 
         config(dOpts, cfg);
 
@@ -118,9 +116,7 @@
             if (k.indexOf("data-ry-") === 0) {
                 k = k.substr(8);
 
-                if (ignoreData.indexOf("," + k + ",") === -1) {
-                    obj[k] = data(el, k);
-                }
+                if (ignoreData.indexOf("," + k + ",") === -1) obj[k] = data(el, k);
             }
         }
 
@@ -135,7 +131,11 @@
             return v === "true";
         } else if (!isNaN(v)) {
             return parseFloat(v);
-        } else if (/^\[[\s\S]+\]$|^\{[^:]+[:][\s\S]+\}$/.test(v)) {
+        }
+
+        var first = v[0], last = v[v.length - 1];
+
+        if ((first === "[" && last === "]") || (first === "{" && last === "}")) {
             try { resp = JSON.parse(v); } catch (e) {}
         }
 
@@ -178,9 +178,7 @@
         for (var i = 0, j = els.length; i < j; i++) {
             var el = els[i];
 
-            if (!el.id) {
-                el.id = "responsive-youtube-" + (++genericIds);
-            }
+            if (!el.id) el.id = "responsive-youtube-" + (++genericIds);
 
             putPlayer(el.id, data(el, "video"), dataVars(el));
         }
@@ -189,7 +187,7 @@
     function config(f, t)
     {
         for (var k in f) {
-            if (!/^(object|function)$/i.test(typeof f[k])) t[k] = f[k];
+            if ([ "object", "function" ].indexOf(typeof f[k]) !== -1) t[k] = f[k];
         }
     }
 
@@ -219,6 +217,8 @@
         } else {
             dOpts = {};
         }
+
+        if (!paused) return;
 
         paused = false;
 

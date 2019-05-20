@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>Create responsive YouTube players dynamics</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 </head>
 <body>
 
-<button id="video1">Add video 1</button>
-<button id="video2">Add video 2</button>
+<button onclick="addVideo('TALH8SsQJp4')">Add video 1</button>
+<button onclick="addVideo('5ABos9UTfJU')">Add video 2</button>
+<button onclick="addVideo('N_-Cu9_2YAA')">Add video 3</button>
 
 <hr>
 
@@ -17,31 +19,12 @@ ResponsiveYoutube.start({
     "rel": 0 //Remove related videos
 });
 
-(function (d) {
-    var v1, v2;
-
-    function addVideo(id)
-    {
-        var el = d.createElement("div");
-        el.setAttribute("data-ry-video", id);
-        d.body.appendChild(el);
-    }
-
-    d.getElementById("video1").onclick = function () {
-        if (v1) return;
-
-        v1 = true;
-
-        addVideo("TALH8SsQJp4");
-    };
-    d.getElementById("video2").onclick = function () {
-        if (v2) return;
-
-        v2 = true;
-
-        addVideo("5ABos9UTfJU");
-    };
-})(document);
+function addVideo(id)
+{
+    var el = document.createElement("div");
+    el.setAttribute("data-ry-video", id);
+    document.body.appendChild(el);
+}
 </script>
 </body>
 </html>

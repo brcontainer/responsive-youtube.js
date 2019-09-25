@@ -1,5 +1,5 @@
 /*
- * Responsive-youtube.js 0.1.6
+ * Responsive-youtube.js 0.1.7
  *
  * Copyright (c) 2019 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *

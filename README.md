@@ -48,7 +48,7 @@ import ResponsiveYoutube from 'responsive-youtube.js';
 RequireJS:
 
 ```javascript
-define(['folder/foo/bar/responsive-youtube'], function (ResponsiveYoutube) {
+requirejs(['folder/foo/bar/responsive-youtube'], function (ResponsiveYoutube) {
     ...
 });
 ```

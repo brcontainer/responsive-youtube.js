@@ -29,6 +29,30 @@ ResponsiveYoutube.start();
 </script>
 ```
 
+Import:
+
+```javascript
+const ResponsiveYoutube = require('responsive-youtube.js');
+
+...
+```
+
+ESM/ES6 import:
+
+```javascript
+import ResponsiveYoutube from 'responsive-youtube.js';
+
+...
+```
+
+RequireJS:
+
+```javascript
+define(['folder/foo/bar/responsive-youtube'], function (ResponsiveYoutube) {
+    ...
+});
+```
+
 ## Properties and functions
 
 Name | description
@@ -109,13 +133,50 @@ Usage in html:
 
 ```html
 <!-- autoplay -->
-<div data-ry-video="eZh0R6uB5Zc" data-ry-autoplay="1"></div>
+<div data-ry-video="hFUQQIsPoVA" data-ry-autoplay="1"></div>
 
 <!-- remove related -->
-<div data-ry-video="eZh0R6uB5Zc" data-ry-rel="1"></div>
+<div data-ry-video="hFUQQIsPoVA" data-ry-rel="1"></div>
 
 <!-- without controls with closed caption -->
-<div data-ry-video="eZh0R6uB5Zc" data-ry-controls="0" data-ry-cc_load_policy="1"></div>
+<div data-ry-video="hFUQQIsPoVA" data-ry-controls="0" data-ry-cc_load_policy="1"></div>
+```
+
+---
+
+## Youtube iframe embed with JSON-LD or microdata
+
+Example with JSON-LD
+
+```html
+<div data-ry-video="<youtube ID>"></div>
+
+<script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "VideoObject",
+    "name": "Youtube iframe embed with JSON-LD",
+    "description": "Youtube iframe embed with JSON-LD example",
+    "thumbnailUrl": "https://i.ytimg.com/vi/<youtube ID>/default.jpg",
+    "uploadDate": "2020-08-10T08:01:27Z",
+    "duration": "PT15M43S",
+    "embedUrl": "https://www.youtube.com/embed/<youtube ID>",
+    "interactionCount": "464"
+}</script>
+```
+
+Example with microdata
+
+```html
+<div itemscope itemprop="video" itemtype="http://schema.org/VideoObject">
+    <h2><span itemprop="name">Youtube iframe embed with microdata</span></h2>
+    <meta itemprop="duration" content="PT15M43S">
+    <meta itemprop="uploadDate" content="2020-08-10T08:01:27Z">
+    <meta itemprop="thumbnailURL" content="https://i.ytimg.com/vi/<youtube ID>/default.jpg">
+    <meta itemprop="interactionCount" content="464">
+    <meta itemprop="embedURL" content="https://youtube.googleapis.com/v/<youtube ID>">
+    <p itemprop="description">Youtube iframe embed with microdata example</p>
+    <div data-ry-video="<youtube ID>"></div>
+</div>
 ```
 
 ---

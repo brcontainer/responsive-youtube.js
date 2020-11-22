@@ -1,12 +1,12 @@
 /*
- * Responsive-youtube.js 0.1.7
+ * Responsive-youtube.js 0.2.0
  *
- * Copyright (c) 2019 Guilherme Nascimento (brcontainer@yahoo.com.br)
+ * Copyright (c) 2020 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
  * Released under the MIT license
  */
 
-(function (w, d, u) {
+(function (u) {
     "use strict";
 
     var players = [],
@@ -17,10 +17,24 @@
         dOpts = {},
         timeout,
         readytimeout,
-        element = w.Element && w.Element.prototype,
+        w = typeof window !== "undefined" ? window : {},
+        d = w.document ? w.document : {},
+        elementProto = w.Element && w.Element.prototype,
         query = "[data-ry-video]:not(iframe)",
         ignoreData = ",with,height,ignore,video,cover,",
         MO = w.MutationObserver || w.WebKitMutationObserver;
+
+    var main = {
+        "start": start,
+        "destroy": destroy,
+        "supported": !!MO,
+        "on": function (name, callback) {
+            evt(name, callback);
+        },
+        "off": function (name, callback) {
+            evt(name, callback, true);
+        }
+    };
 
     function updateSize(done)
     {
@@ -268,25 +282,21 @@
         });
     }
 
-    w.ResponsiveYoutube = {
-        "start": start,
-        "destroy": destroy,
-        "supported": !!MO,
-        "on": function (name, callback) {
-            evt(name, callback);
-        },
-        "off": function (name, callback) {
-            evt(name, callback, true);
-        }
-    };
+    if (elementProto && !elementProto.matches) {
+        elementProto.matches = elementProto.matchesSelector || elementProto.mozMatchesSelector || elementProto.msMatchesSelector ||
+        elementProto.oMatchesSelector || elementProto.webkitMatchesSelector || function (s) {
+            var m = (this.document || this.ownerDocument).querySelectorAll(s), i = m.length;
 
-    if (!element || element.matches) return;
+            while (--i >= 0 && m[i] !== this);
+            return i > -1;
+        };
+    }
 
-    element.matches = element.matchesSelector || element.mozMatchesSelector || element.msMatchesSelector ||
-    element.oMatchesSelector || element.webkitMatchesSelector || function (s) {
-        var m = (this.document || this.ownerDocument).querySelectorAll(s), i = m.length;
+    w.ResponsiveYoutube = main;
 
-        while (--i >= 0 && m[i] !== this);
-        return i > -1;
-    };
-})(window, document);
+    // CommonJS
+    if (typeof module !== "undefined" && module.exports) module.exports = main;
+
+    // RequireJS
+    if (typeof define !== "undefined") define(function () { return main; });
+})();

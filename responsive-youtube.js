@@ -1,5 +1,5 @@
 /*
- * Responsive-youtube.js 0.2.0
+ * Responsive-youtube.js 0.2.1
  *
  * Copyright (c) 2020 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
@@ -18,7 +18,7 @@
         timeout,
         readytimeout,
         w = typeof window !== "undefined" ? window : {},
-        d = w.document ? w.document : {},
+        d = w.document || {},
         elementProto = w.Element && w.Element.prototype,
         query = "[data-ry-video]:not(iframe)",
         ignoreData = ",with,height,ignore,video,cover,",
@@ -201,7 +201,7 @@
     function config(f, t)
     {
         for (var k in f) {
-            if ([ "object", "function" ].indexOf(typeof f[k]) !== -1) t[k] = f[k];
+            if ([ "object", "function" ].indexOf(typeof f[k]) === -1) t[k] = f[k];
         }
     }
 

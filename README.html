@@ -1251,14 +1251,14 @@ body .markdown-body
 <td>Setting the parameter&rsquo;s value to 1 causes video annotations to be shown by default, whereas setting to 3 causes video annotations to not be shown by default. The default value is 1.</td>
 </tr>
 <tr>
-<td><code>list</code></td>
-<td><code>data-ry-list</code></td>
-<td>The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.</td>
+<td><s><code>list</code></s></td>
+<td><s><code>data-ry-list</code></s></td>
+<td><s>The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.</s> (<a href="https://developers.google.com/youtube/player_parameters?playerVersion=HTML5#release_notes_10_13_2020">no longer be supported as of 15 November 2020</a>)</td>
 </tr>
 <tr>
-<td><code>listType</code></td>
-<td><code>data-ry-listType</code></td>
-<td>The listType parameter, in conjunction with the list parameter, identifies the content that will load in the player. Valid parameter values are playlist, search, and <code>user_uploads</code>.</td>
+<td><s><code>listType</code></s></td>
+<td><s><code>data-ry-listType</code></s></td>
+<td><s>The listType parameter, in conjunction with the list parameter, identifies the content that will load in the player. Valid parameter values are playlist, search, and <code>user_uploads</code></s> (no longer be supported as of 15 November 2020)</td>
 </tr>
 <tr>
 <td><code>loop</code></td>
@@ -1283,7 +1283,7 @@ body .markdown-body
 <tr>
 <td><code>rel</code></td>
 <td><code>data-ry-rel</code></td>
-<td>This parameter indicates whether the player should show related videos when playback of the initial video ends. Supported values are 0 and 1. The default value is 1.</td>
+<td>If the rel parameter is set to 0, related videos will come from the same channel as the video that was just played (<a href="https://developers.google.com/youtube/player_parameters?playerVersion=HTML5#release_notes_08_23_2018">changing on or after September 25, 2018</a>)</td>
 </tr>
 <tr>
 <td><code>showinfo</code></td>

@@ -108,13 +108,13 @@ Property | html5 | description
 `fs` | `data-ry-fs` | Setting this parameter to 0 prevents the fullscreen button from displaying in the player. The default value is 1, which causes the fullscreen button to display.
 `hl` | `data-ry-hl` | Sets the player's interface language.
 `iv_load_policy` | `data-ry-iv_load_policy` | Setting the parameter's value to 1 causes video annotations to be shown by default, whereas setting to 3 causes video annotations to not be shown by default. The default value is 1.
-`list` | `data-ry-list` | The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.
-`listType` | `data-ry-listType` | The listType parameter, in conjunction with the list parameter, identifies the content that will load in the player. Valid parameter values are playlist, search, and `user_uploads`.
+<s>`list`</s> | <s>`data-ry-list`</s> | <s>The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.</s> ([no longer be supported as of 15 November 2020](https://developers.google.com/youtube/player_parameters?playerVersion=HTML5#release_notes_10_13_2020))
+<s>`listType`</s> | <s>`data-ry-listType`</s> | <s>The listType parameter, in conjunction with the list parameter, identifies the content that will load in the player. Valid parameter values are playlist, search, and `user_uploads`</s> (no longer be supported as of 15 November 2020)
 `loop` | `data-ry-loop` | In the case of a single video player, a setting of 1 causes the player to play the initial video again and again.
 `modestbranding` | `data-ry-modestbranding` | This parameter lets you use a YouTube player that does not show a YouTube logo. Set the parameter value to 1 to prevent the YouTube logo from displaying in the control bar. Note that a small YouTube text label will still display in the upper-right corner of a paused video when the user's mouse pointer hovers over the player.
 `playlist` | `data-ry-playlist` | This parameter specifies a comma-separated list of video IDs to play. If you specify a value, the first video that plays will be the VIDEO_ID specified in the URL path, and the videos specified in the playlist parameter will play thereafter.
 `playsinline` | `data-ry-playsinline` | This parameter controls whether videos play inline or fullscreen in an HTML5 player on iOS.
-`rel` | `data-ry-rel` | This parameter indicates whether the player should show related videos when playback of the initial video ends. Supported values are 0 and 1. The default value is 1.
+`rel` | `data-ry-rel` | If the rel parameter is set to 0, related videos will come from the same channel as the video that was just played ([changing on or after September 25, 2018](https://developers.google.com/youtube/player_parameters?playerVersion=HTML5#release_notes_08_23_2018))
 `showinfo` | `data-ry-showinfo` | Supported values are 0 and 1.
 `start` | `data-ry-start` | This parameter causes the player to begin playing the video at the given number of seconds from the start of the video.
 `widget_referrer` | `data-ry-widget_referrer` | This parameter identifies the URL where the player is embedded.
